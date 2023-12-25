@@ -3,7 +3,6 @@ Very simple example to grap data from stocks that is very nicely provided from p
 
 """
 
-
 from polygon import RESTClient
 
 client = RESTClient(api_key="PLACE YOUR POLYGON KEY HERE")
