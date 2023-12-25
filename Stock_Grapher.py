@@ -66,10 +66,12 @@ def print_current_agg(agg_collection, color_to_print):
     
     os.system('clear')
     terminal_size = os.get_terminal_size()
-    terminal_height = terminal_size.lines - 1
+    terminal_height = terminal_size.lines - 2
     
     most_current_agg = len(agg_collection) - 1
     matrix_slot_for_agg = 0
+    
+    header_string = ""
 
     terminal_width = terminal_size.columns - len(str(agg_collection[most_current_agg].close))
     
@@ -84,9 +86,16 @@ def print_current_agg(agg_collection, color_to_print):
         if iterval_amount == 0:
             iterval_amount = .1
         
-    # Print the header for the table
-    print("Count: " + str(len(agg_collection)) + " Opening: " + str(agg_collection[most_current_agg].opening) + " High: " + str(agg_collection[most_current_agg].high) + " Low: " + str(agg_collection[most_current_agg].low) + 
+        
+    header_string =  ("Count: " + str(len(agg_collection)) + " Opening: " + str(agg_collection[most_current_agg].opening) + " High: " + str(agg_collection[most_current_agg].high) + " Low: " + str(agg_collection[most_current_agg].low) + 
     " Close: " + str(agg_collection[most_current_agg].close) + " Volume: " + str(agg_collection[most_current_agg].volume) + " vwap: " + str(agg_collection[most_current_agg].vwap) + " Transactions: " + str(agg_collection[most_current_agg].transactions))
+    
+    if len(header_string) > terminal_width:
+        header_string =  ("C: " + str(len(agg_collection)) + " O: " + str(agg_collection[most_current_agg].opening) + " H: " + str(agg_collection[most_current_agg].high) + " L: " + str(agg_collection[most_current_agg].low) + 
+        " C: " + str(agg_collection[most_current_agg].close) + " V: " + str(agg_collection[most_current_agg].volume) + " v: " + str(agg_collection[most_current_agg].vwap) + " T: " + str(agg_collection[most_current_agg].transactions))
+    
+    
+    print(header_string)
     
     for i in range(terminal_height):
         matrix[i][0] = round(agg_collection[most_current_agg].close + ((int(terminal_height / 2) * iterval_amount) - (i * iterval_amount)), 1)
@@ -109,7 +118,7 @@ def print_current_agg(agg_collection, color_to_print):
     for i in matrix:
         #print(i)
         for j in i:
-            print(color_to_print + str(j), end='')
+            print(color_to_print + str(j) + Color.RESET, end='')
         print()
     
   
@@ -126,7 +135,7 @@ def stock_printer(opened_file):
         terminal_size = os.get_terminal_size()
         terminal_height = terminal_size.lines - 1
     
-        if len(agg) >= int(terminal_height / 2):
+        if len(agg) >= int(terminal_height * .75):
             agg = agg[5:]
             
         if len(agg) > 1:
@@ -141,7 +150,7 @@ def stock_printer(opened_file):
             
         print_current_agg(agg, agg_color)
         count += 1
-        time.sleep(1)
+        time.sleep(.1)
         agg.append(get_next_agg(opened_file))
         
     
